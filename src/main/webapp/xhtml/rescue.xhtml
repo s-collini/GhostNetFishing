@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+<h:head>
+    <title>GhostNetFishing</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="../../style.css"/>
+</h:head>
+
+<h:body>
+    <h:outputLink value="index.xhtml">
+        <img id="header_img" src="../images/logo.jpg" alt="Webseiten-Logo"/>
+    </h:outputLink>
+
+    <div id="header">
+        <ul>
+            <li>
+                <h:outputLink value="index.xhtml">
+                    <h:outputText value="Startseite"/>
+                </h:outputLink>
+                <h:outputLink> Über Uns</h:outputLink>
+                <h:outputLink> Kontakt </h:outputLink>
+                <p:button icon="pi pi-user" styleClass="rounded-button ui-button-info ui-button-outlined"/>
+
+            </li>
+        </ul>
+    </div>
+
+    <h1>Geisternetz(e) bergen</h1>
+    <div id="logout">
+        <p:button value="Logout" styleClass="ui-button-outlined ui-button-info" href="index.xhtml"/>
+    </div>
+
+    <div id="content">
+        <h3>Geisternetzbergung(en) bekanntgeben</h3>
+
+        <h:form>
+            <div class="flex-container">
+                <div class="flex-item">
+                    <h4>Nachname*</h4>
+                    <span class="ui-float-label">
+             <p:inputText id="surname" required="true"/>
+             <p:outputLabel for="surname" value="Mustermann"/>
+         </span>
+                    <h:message for="surname" styleClass="error"/>
+                </div>
+
+                <div class="flex-item">
+                    <h4>Vorname*</h4>
+                    <span class="ui-float-label">
+             <p:inputText id="name" required="true"/>
+             <p:outputLabel for="name" value="Max"/>
+         </span>
+                    <h:message for="name" styleClass="error"/>
+                </div>
+
+                <div class="flex-item">
+                    <h4>Telefonnummer*</h4>
+                    <span class="ui-float-label">
+             <p:inputText id="phoneNumber" required="true"/>
+             <p:outputLabel for="phoneNumber" value="z.B. +43 676 3718695"/>
+         </span>
+                    <h:message for="phoneNumber" styleClass="error"/>
+                </div>
+            </div>
+
+            <div class="flex-container">
+                <div class="flex-item">
+                    <h4>Bergungsstandort*</h4>
+                    <p:selectCheckboxMenu id="location"
+                                          filter="true" filterMatchMode="startsWith"
+                                          multiple="true" emptyLabel="bitte Bergungsstandort(e) wählen"
+                                          updateLabel="true"
+                                          style="min-width: 15rem" panelStyle="width: 30rem" scrollHeight="250"
+                                          value="#{formController.selectLocations}"
+                                          required="true">
+                        <f:selectItems value="#{formController.locations}"  var ="location"
+                                       itemLabel="#{location}"
+                                       itemValue="#{location}"
+                                       />
+                    </p:selectCheckboxMenu>
+                    <h:message for="location" styleClass="error"/>
+                </div>
+
+                <div class="flex-item">
+                    <h4>Status*</h4>
+                    <div class="card">
+                        <p:selectOneMenu id="status" value="#{formController.rescueSelectStatus}"
+                                         layout="pageDirection" required="true">
+                            <f:selectItem itemLabel="bitte Status wählen" itemValue="" />
+                            <f:selectItems value="#{formController.rescueStatus}" var="status"
+                                           itemLabel="#{status}"
+                                           itemValue="#{status}"/>
+                        </p:selectOneMenu>
+                        <h:message for="status" styleClass="error"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-container">
+                <div class="flex-item">
+                    <h4>Anmerkungen*</h4>
+                    <div class="card">
+                        <p:inputTextarea id="note" rows="4" cols="33">
+                            <f:validateLength minimum="20" maximum="300"/>
+                        </p:inputTextarea>
+                        <h:message for="note" styleClass="error"/>
+                    </div>
+                </div>
+            </div>
+            <p:commandButton value="Senden" styleClass="ui-button-outlined ui-button-info"
+                             action="#{formController.rescueSubmit()}" update="@form"/>
+        </h:form>
+    </div>
+
+    <div id="footer">
+        <ul>
+            <li>
+                <h:outputLink> Datenschutz</h:outputLink>
+                <h:outputLink> Impressum </h:outputLink>
+                <h:outputLink> Instagram </h:outputLink>
+            </li>
+        </ul>
+    </div>
+
+</h:body>
+</html>

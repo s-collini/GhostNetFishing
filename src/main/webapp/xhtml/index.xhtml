@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+   <title>GhostNetFishing</title>
+   <link rel="stylesheet" type="text/css" media="screen" href="../style.css"/>
+</h:head>
+
+<h:body>
+
+    <h:outputLink value = "index.xhtml">
+        <img id = "header_img" src = "WEB-INF/images/logo.jpg" alt="Webseiten-Logo"/>
+    </h:outputLink>
+
+   <div id ="header">
+      <ul>
+         <li>
+             <h:outputLink value = "index.xhtml">
+                 <h:outputText value = "Startseite" />
+             </h:outputLink>
+             <h:outputLink> Über Uns</h:outputLink>
+             <h:outputLink> Kontakt </h:outputLink>
+             <p:button icon="pi pi-user" styleClass="rounded-button ui-button-info ui-button-outlined"/>
+         </li>
+      </ul>
+</div>
+<div id = "content">
+   <h1>GhostNetFishing - Geisternetze melden, Tierleben retten</h1>
+
+         <p:accordionPanel >
+            <p:tab title = "Fakten">
+               <h4> Auswirkungen auf die Umwelt</h4>
+               <p> Meereslebewesen: Geisternetze fangen und töten viele Meereslebewesen wie Fische, Delfine, Schildkröten und Vögel. Diese Tiere verfangen sich und sterben oft an Erschöpfung oder Verletzungen. </p>
+               <p>  Ökosysteme: Sie beschädigen Korallenriffe und andere empfindliche Meeresökosysteme, indem sie sich um Korallen wickeln und diese zerstören. </p>
+               <p>  Plastikverschmutzung: Wenn sie sich zersetzen, tragen Geisternetze zur Mikroplastikverschmutzung bei, die die Nahrungsketten im Meer und letztendlich auch den Menschen beeinträchtigen. </p>
+               <h4> Wirtschaftliche Auswirkungen</h4>
+               <p>  Fischerei: Verlorene Netze reduzieren die Fischbestände und schaden der Fischereiindustrie, indem sie weiterhin Fische fangen und töten. </p>
+               <p>   Tourismus: Beschädigte Küsten und verschmutzte Strände wirken sich negativ auf den Tourismus aus. </p>
+               <h4> Schätzungen und Statistiken</h4>
+               <p> Menge: Schätzungsweise 640.000 Tonnen Fischereigeräte, einschließlich Geisternetze, gehen jedes Jahr verloren oder werden zurückgelassen. </p>
+               <p>  Prozentsatz: Etwa 10% des gesamten Meeresplastiks besteht aus verlorenen Fischereigeräten. </p>
+               <p>  Hotspots: Bestimmte Gebiete wie die Nordsee, das Mittelmeer und der Pazifische Müllstrudel sind besonders stark betroffen. </p>
+            </p:tab>
+            <p:tab title = "FAQ">
+               <h3>Allgemeine Fragen</h3>
+               <b>Was ist GhostNetFishing?</b>
+               <p>GhostNetFishing ist eine Webapplikation, die sich der Identifizierung, Entfernung und dem Recycling von Geisternetzen in unseren Ozeanen widmet. Unsere Mission ist es, die Meeresumwelt zu schützen und nachhaltige Fischereipraktiken zu fördern.</p>
+               <b>Was sind Geisternetze?</b>
+               <p>Geisternetze sind verlorene oder weggeworfene Fischernetze, die weiterhin Fische und andere Meereslebewesen fangen. Sie stellen eine große Gefahr für die Meeresökosysteme dar, verschmutzen die Ozeane und verursachen wirtschaftliche Schäden.</p>
+               <h3>Nutzung der Webapplikation</h3>
+              <b> Wie kann ich die GhostNetFishing-Webapplikation nutzen?</b>
+               <p>Besuchen Sie unsere Webseite und erstellen Sie ein kostenloses Konto. Nach der Anmeldung können Sie Geisternetze melden, deren Position auf unserer Karte einsehen und Informationen über laufende Räumungsprojekte erhalten.</p>
+              <b> Wie kann ich ein Geisternetz melden?</b>
+              <p> Loggen Sie sich in Ihr Konto ein und nutzen Sie das Formular auf unserer "Geisternetz melden"-Seite. Geben Sie so viele Details wie möglich an, einschließlich der genauen Position und einer Beschreibung des Netzes.</p>
+              <b> Wie kann ich Geisternetze bergen?</b>
+               <p>Wenn Sie ein Geisternetz gefunden haben und über die erforderliche Ausrüstung und Erfahrung verfügen, können Sie an seiner Bergung teilnehmen. Bitte melden Sie das Netz zunächst über unsere Webapplikation, damit wir die Position und den Zustand dokumentieren können. Folgen Sie dann den Anweisungen in unserer Bergungsanleitung, um das Netz sicher zu entfernen und uns zu informieren, sobald die Bergung abgeschlossen ist.</p>
+               <b>Wie kann ich Geisternetze als verschollen melden?</b>
+              <p> Sollten Sie feststellen, dass ein zuvor gemeldetes Geisternetz nicht mehr an der angegebenen Position ist, melden Sie dies bitte über unser Webformular "Verschollenes Netz melden". Geben Sie alle relevanten Informationen an, einschließlich der letzten bekannten Position und eventueller Veränderungen in der Umgebung. Unser Team wird die Meldung prüfen und entsprechende Maßnahmen ergreifen.</p>
+            </p:tab>
+            </p:accordionPanel>
+
+
+   <h3>Unterstützungsmöglichkeiten</h3>
+   <h:form>
+   <h:dataTable styleClass="table" var="options" value="#{supportOptionsController.options}" >
+         <h:column>
+            <h:commandLink value="#{options.name}" action="#{supportOptionsController.navigateToPage(options.id)}"/>
+         </h:column>
+         <h:column>
+            <h:graphicImage url="#{options.image}" width = "350rem" height ="300rem"/>
+         </h:column>
+         <h:column>
+            <h:outputText value="#{options.description}"/>
+         </h:column>
+      </h:dataTable>
+   </h:form>
+   <p><small > Fotoquelle: Pixabay </small></p>
+
+      <ul>
+         <li>
+             <p:button locationId ="buttonPartner" value="Unser Partner" styleClass="ui-button-outlined ui-button-info" href = "https://www.wwf.at/"/>
+         </li>
+      </ul>
+
+      <p><small> Der Text der Webseite wurde von ChatGPT generiert </small></p>
+   </div>
+
+   <div id = "footer">
+      <ul>
+         <li>
+             <h:outputLink> Datenschutz</h:outputLink>
+             <h:outputLink> Impressum </h:outputLink>
+             <h:outputLink> Instagram </h:outputLink>
+         </li>
+      </ul>
+   </div>
+
+</h:body>
+</html>

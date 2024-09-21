@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>GhostNetFishing</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="../../style.css"/>
+</h:head>
+
+<h:body>
+
+    <h:outputLink value = "index.xhtml">
+        <img id="header_img" src = "../images/logo.jpg" alt="Webseiten-Logo"/>
+    </h:outputLink>
+
+    <div id ="header">
+        <ul>
+            <li>
+                <h:outputLink value = "index.xhtml">
+                    <h:outputText value = "Startseite" />
+                </h:outputLink>
+                <h:outputLink> Über Uns</h:outputLink>
+                <h:outputLink> Kontakt </h:outputLink>
+                <p:button icon="pi pi-user" styleClass="rounded-button ui-button-info ui-button-outlined"/>
+            </li>
+        </ul>
+    </div>
+
+    <h:form>
+        <h1>Herzlich Willkommen bei GhostNetFishing</h1>
+        <h3>Registrierung: Bitte geben Sie Ihre Daten ein</h3>
+        <h:panelGrid columns="3">
+            <h:outputLabel value="Benutzername:" for="username" />
+            <h:inputText id="username" value="#{userController.user.username}" size = "20" required="true"/>
+            <h:message for="username" styleClass="error"/>
+
+            <h:outputLabel value="Passwort:" for="password"/>
+            <h:inputSecret id="password" value="#{userController.user.password}" size = "20" required="true"/>
+            <h:message for="password" styleClass="error"/>
+
+            <h:outputLabel value="Passwort wiederholen:" for="repeatPassword"/>
+            <h:inputSecret id="repeatPassword" value="#{userController.repeatPassword}" size = "20" required="true"/>
+            <h:message for="repeatPassword" styleClass="error"/>
+
+            <h:outputLabel value="Email-Adresse:" for="mail"/>
+            <h:inputText id="mail" value="#{userController.user.mail}" size = "20" required="true"/>
+            <h:message for="mail" styleClass="error"/>
+
+            <p:commandButton value="Registrieren" styleClass="ui-button-outlined ui-button-info" action="#{userController.register()}" update = "@form"/>
+            <h:messages globalOnly="true" styleClass="error" />
+
+        </h:panelGrid>
+    </h:form>
+
+
+    <div id = "footer">
+        <ul>
+            <li>
+                <h:outputLink> Datenschutz</h:outputLink>
+                <h:outputLink> Impressum </h:outputLink>
+                <h:outputLink> Instagram </h:outputLink>
+            </li>
+        </ul>
+    </div>
+
+</h:body>
+</html>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+>
+
+<h:head>
+    <title>GhostNetFishing</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="../../style.css"/>
+</h:head>
+
+<h:body>
+    <h:outputLink value = "index.xhtml">
+        <img id="header_img" src = "../images/logo.jpg" alt="Webseiten-Logo"/>
+    </h:outputLink>
+
+    <div id ="header">
+        <ul>
+            <li>
+                <h:outputLink value = "index.xhtml">
+                    <h:outputText value = "Startseite" />
+                </h:outputLink>
+                <h:outputLink> Über Uns</h:outputLink>
+                <h:outputLink> Kontakt </h:outputLink>
+                <p:button icon="pi pi-user" styleClass="rounded-button ui-button-info ui-button-outlined"/>
+            </li>
+        </ul>
+    </div>
+
+    <h1>Überblick Geisternetze</h1>
+
+    <div id ="content">
+
+        <h3>Geisternetzdatenbank</h3>
+        <div id="logout">
+            <p:button value="Logout" styleClass="ui-button-outlined ui-button-info" href="index.xhtml"/>
+        </div>
+        <h:form>
+        <p:dataTable styleClass="table" var="ghostNets" value="#{ghostNetsController.nets}" allowUnsorting="true" sortMode = "single" stripedRows="true" showGridlines="true">
+            <p:columnGroup type="header">
+                <p:row>
+                    <p:column colspan="2" headerText="Standort"/>
+                    <p:column colspan="2" headerText="Geschätzte Größe"/>
+                    <p:column sortBy = "#{ghostNets.status}" rowspan="2" headerText ="Status"/>
+                </p:row>
+                <p:row>
+                    <p:column sortBy = "#{ghostNets.longitude}" headerText="Längengrad"/>
+                    <p:column sortBy = "#{ghostNets.latitude}" headerText="Breitengrad"/>
+                    <p:column sortBy = "#{ghostNets.length}" headerText="Länge"/>
+                    <p:column sortBy = "#{ghostNets.width}" headerText="Breite"/>
+                </p:row>
+            </p:columnGroup>
+
+            <p:column>
+                <h:outputText value="#{ghostNets.longitude}"/>
+            </p:column>
+            <p:column>
+                <h:outputText value="#{ghostNets.latitude}"/>
+            </p:column>
+            <p:column>
+                <h:outputText value="#{ghostNets.length}"/>
+            </p:column>
+            <p:column >
+                <h:outputText value="#{ghostNets.width}"/>
+            </p:column>
+            <p:column >
+                <h:outputText value="#{ghostNets.status}"/>
+            </p:column>
+        </p:dataTable>
+        </h:form>
+
+        <p><small> Die Einträge sind frei erfunden und teilweise durch ChatGPT generiert </small></p>
+    </div>
+
+
+    <div id = "footer">
+        <ul>
+            <li>
+                <h:outputLink> Datenschutz</h:outputLink>
+                <h:outputLink> Impressum </h:outputLink>
+                <h:outputLink> Instagram </h:outputLink>
+            </li>
+        </ul>
+    </div>
+
+</h:body>
+</html>
