@@ -8,7 +8,7 @@
 >
 <h:head>
     <title>GhostNetFishing</title>
-    <link rel="stylesheet" type="text/css" media="screen" href="../../style.css"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="../style.css"/>
 </h:head>
 
 <h:body>
@@ -36,13 +36,14 @@
         <h3>Geisternetzmeldung(en) machen</h3>
 
         <h:form>
+            <h:inputHidden id="formType" value="report" />
 
             <div class="flex-container">
                 <div class="flex-item">
                     <h4>Nachname</h4>
                     <span class="ui-float-label">
-       <p:inputText id="surname" value="#{formController.surname}"
-                    required="#{formController.reportSelectStatus eq 'Geisternetz als verschollen melden'}" requiredMessage="Geisternetze anonym melden nicht möglich"/>
+       <p:inputText id="surname" value="#{formController.newForm.surname}"
+                    required="#{formController.newGhostNet.status eq 'verschollen'}" requiredMessage="Geisternetze anonym melden nicht möglich"/>
        <p:outputLabel for="surname" value="Mustermann"/>
    </span>
                     <p:message for="surname" styleClass="error"/>
@@ -51,8 +52,8 @@
                 <div class="flex-item">
                     <h4>Vorname</h4>
                     <span class="ui-float-label">
-       <p:inputText id="name" value="#{formController.name}"
-                    required="#{formController.reportSelectStatus eq 'Geisternetz als verschollen melden'}" requiredMessage="Geisternetze anonym melden nicht möglich"/>
+       <p:inputText id="name" value="#{formController.newForm.name}"
+                    required="#{formController.newGhostNet.status eq 'verschollen'}" requiredMessage="Geisternetze anonym melden nicht möglich"/>
        <p:outputLabel for="name" value="Max"/>
    </span>
                     <p:message for="name" styleClass="error"/>
@@ -61,8 +62,8 @@
                 <div class="flex-item">
                     <h4>Telefonnummer</h4>
                     <span class="ui-float-label">
-       <p:inputText id="phoneNumber" value="#{formController.phoneNumber}"
-                    required="#{formController.reportSelectStatus eq 'Geisternetz als verschollen melden'}" requiredMessage="Geisternetze anonym melden nicht möglich"/>
+       <p:inputText id="phoneNumber" value="#{formController.newForm.phoneNumber}"
+                    required="#{formController.newGhostNet.status eq 'verschollen'}" requiredMessage="Geisternetze anonym melden nicht möglich"/>
        <p:outputLabel for="phoneNumber" value="z.B. +43 676 3718695"/>
    </span>
                     <p:message for="phoneNumber" styleClass="error"/>
@@ -81,19 +82,19 @@
                 <div class="flex-item">
                     <h4>Standort Längengrad*</h4>
                     <span class="ui-float-label">
-                       <p:inputText id="latitude" required="true"/>
-                       <p:outputLabel for="latitude" value="z.B. 50.52188"/>
+                       <p:inputText id="longitude" value="#{formController.newGhostNet.longitude}" required="true"/>
+                       <p:outputLabel for="longitude" value="z.B. 50.52188"/>
                 </span>
-                    <h:message for="latitude" styleClass="error"/>
+                    <h:message for="longitude" styleClass="error"/>
                 </div>
 
                 <div class="flex-item">
                     <h4>Standort Breitengrad*</h4>
                     <span class="ui-float-label">
-                       <p:inputText id="langitude" required="true"/>
-                       <p:outputLabel for="langitude" value="z.B. 1.58138"/>
+                       <p:inputText id="latitude" value="#{formController.newGhostNet.latitude}" required="true"/>
+                       <p:outputLabel for="latitude" value="z.B. 1.58138"/>
                 </span>
-                    <h:message for="langitude" styleClass="error"/>
+                    <h:message for="latitude" styleClass="error"/>
                 </div>
             </div>
 
@@ -101,7 +102,7 @@
                 <div class="flex-item">
                     <h4>Geschätzte Länge (in Meter)*</h4>
                     <span class="ui-float-label">
-                       <p:inputText id="length" required="true"/>
+                       <p:inputText id="length" value="#{formController.newGhostNet.length}" required="true"/>
                        <p:outputLabel for="length" value="2"/>
                 </span>
                     <h:message for="length" styleClass="error"/>
@@ -110,7 +111,7 @@
                 <div class="flex-item">
                     <h4> Geschätzte Breite (in Meter)*</h4>
                     <span class="ui-float-label">
-                       <p:inputText id="width" required="true"/>
+                       <p:inputText id="width" value="#{formController.newGhostNet.width}" required="true"/>
                        <p:outputLabel for="width" value="1"/>
                     </span>
                     <h:message for="width" styleClass="error"/>
@@ -120,13 +121,13 @@
                 <div class="flex-item">
                     <h4>Status*</h4>
                     <div class="card">
-                        <p:selectOneMenu id="status" value="#{formController.reportSelectStatus}" layout="pageDirection"
+                        <p:selectOneMenu id="status" value="#{formController.newGhostNet.status}" layout="pageDirection"
                                          required="true">
                             <f:selectItem itemLabel="bitte Status wählen" itemValue="" />
                             <f:selectItems value="#{formController.reportStatus}" var="status"
                                            itemLabel="#{status}"
                                            itemValue="#{status}"/>
-                            <f:ajax event="change" render="status" execute="@this"/>
+                            <p:ajax event="change" update="@this" />
                         </p:selectOneMenu>
                         <h:message for="status" styleClass="error"/>
                     </div>
@@ -146,8 +147,7 @@
                 </div>
             </div>
             <p:commandButton value="Senden" styleClass="ui-button-outlined ui-button-info"
-                             action="#{formController.report}">
-                <f:ajax execute="@form" render="@form" />
+                             action="#{formController.report}" process="@form" update="@form">
             </p:commandButton>
 
         </h:form>

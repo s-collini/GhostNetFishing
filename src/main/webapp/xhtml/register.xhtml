@@ -7,7 +7,7 @@
 
 <h:head>
     <title>GhostNetFishing</title>
-    <link rel="stylesheet" type="text/css" media="screen" href="../../style.css"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="../style.css"/>
 </h:head>
 
 <h:body>
@@ -42,7 +42,7 @@
             <h:message for="password" styleClass="error"/>
 
             <h:outputLabel value="Passwort wiederholen:" for="repeatPassword"/>
-            <h:inputSecret id="repeatPassword" value="#{userController.repeatPassword}" size = "20" required="true"/>
+            <h:inputSecret id="repeatPassword" value="#{userController.user.repeatPassword}" size = "20" required="true"/>
             <h:message for="repeatPassword" styleClass="error"/>
 
             <h:outputLabel value="Email-Adresse:" for="mail"/>

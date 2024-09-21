@@ -8,7 +8,7 @@
 
 <h:head>
     <title>GhostNetFishing</title>
-    <link rel="stylesheet" type="text/css" media="screen" href="../../style.css"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="../style.css"/>
 </h:head>
 
 <h:body>
@@ -32,15 +32,21 @@
     <h1>Überblick Geisternetze</h1>
 
     <div id ="content">
-
-        <h3>Geisternetzdatenbank</h3>
         <div id="logout">
             <p:button value="Logout" styleClass="ui-button-outlined ui-button-info" href="index.xhtml"/>
         </div>
-        <h:form>
-        <p:dataTable styleClass="table" var="ghostNets" value="#{ghostNetsController.nets}" allowUnsorting="true" sortMode = "single" stripedRows="true" showGridlines="true">
+
+        <h3>Geisternetzdatenbank</h3>
+
+        <p> Hier sehen Sie die wachsende Datenbank mit allen gemeldeten, verschollenen, geborgenen Geisternetzen und Geisternetzen deren Bergung bereits angemeldet wurde und noch bevorsteht.
+        Zur Bergung eines Geisternetzes bitte auf den Status "gemeldet" klicken, dann werden Sie zur Bergenseite weitergeleitet.
+        </p>
+
+        <h:form id = "datatable">
+        <p:dataTable styleClass="table" value = "#{formController.ghostNet}" var="ghostNets" allowUnsorting="true" sortMode = "single" stripedRows="true" showGridlines="true">
             <p:columnGroup type="header">
                 <p:row>
+                    <p:column sortBy = "#{ghostNets.id}" rowspan="2" headerText ="Netz-ID"/>
                     <p:column colspan="2" headerText="Standort"/>
                     <p:column colspan="2" headerText="Geschätzte Größe"/>
                     <p:column sortBy = "#{ghostNets.status}" rowspan="2" headerText ="Status"/>
@@ -54,6 +60,9 @@
             </p:columnGroup>
 
             <p:column>
+                <h:outputText value="#{ghostNets.id}"/>
+            </p:column>
+            <p:column>
                 <h:outputText value="#{ghostNets.longitude}"/>
             </p:column>
             <p:column>
@@ -66,7 +75,19 @@
                 <h:outputText value="#{ghostNets.width}"/>
             </p:column>
             <p:column >
-                <h:outputText value="#{ghostNets.status}"/>
+                <!--Status als Text ausgeben !-->
+                <h:outputText value="#{ghostNets.status}"
+                              rendered="#{ghostNets.status eq 'verschollen'}" />
+                <h:outputText value="#{ghostNets.status}"
+                              rendered="#{ghostNets.status eq 'geborgen'}" />
+
+                <!-- Status als Link anzeigen -->
+                <p:commandLink value="gemeldet"
+                               action="#{formController.editGhostForm(ghostNets.id)}"
+                               rendered="#{ghostNets.status eq 'gemeldet'}"/>
+                <p:commandLink value="Bergung bevorstehend"
+                               action="#{formController.editGhostForm(ghostNets.id)}"
+                               rendered="#{ghostNets.status eq 'Bergung bevorstehend'}"/>
             </p:column>
         </p:dataTable>
         </h:form>

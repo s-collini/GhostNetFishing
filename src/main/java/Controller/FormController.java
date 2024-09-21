@@ -1,8 +1,8 @@
 package Controller;
 
-import DAO.PersonDAO;
+import DAO.FormDAO;
 import DAO.GhostNetsDAO;
-import Model.Person;
+import Model.Form;
 import Model.GhostNets;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
@@ -21,31 +21,34 @@ import java.util.ResourceBundle;
 // Bean erstellen und Gültigkeitsbereich festlegen
 @Named
 @ViewScoped //damit ID richtig übernommen wird
-public class PersonController implements Serializable {
+public class FormController implements Serializable {
 
     @Inject
-    Person person;
+    Form form;
 
-    //Getter und Setter von Person-Model, damit in report.xhtml auf name zugegriffen werden kann
-    public Person getPerson() {
-        return person;
+    //Getter und Setter, damit in report.xhtml auf name zugegriffen werden kann
+    public Form getForm() {
+        return form;
     }
 
-    public void setPerson(Person person) {
-        this.person = person;
+    public void setForm(Form form) {
+        this.form = form;
     }
 
-    ///////////////// für persistente Datenhaltung//////////////////////////////
+
+    /////////////////////////////// für persistente Datenhaltung//////////////////////////////
     @Inject
-    private PersonDAO personDAO;
+    private FormDAO formDAO;
 
     @Inject
     private GhostNetsDAO ghostNetsDAO;
 
+    private boolean isReportForm;
+    private boolean isRescueForm;
 
-    private List<Person> person;
-    private Person selectedPerson;
-    private Person newPerson;  // Für Bearbeitung oder Erstellung
+    private List<Form> forms;
+    private Form selectedForm;
+    private Form newForm;  // Für Bearbeitung oder Erstellung
 
     private List<GhostNets> ghostNet;
     private GhostNets selectedGhostNet;
@@ -72,9 +75,9 @@ public class PersonController implements Serializable {
 
     @PostConstruct
     public void init() {
-        person = personDAO.findAll(); // Lädt alle Datensätze
+        forms = formDAO.findAll(); // Lädt alle Datensätze
+        newForm = new Form();
         ghostNet = ghostNetsDAO.findAll();
-        newPerson = new Person();
         newGhostNet = new GhostNets();
 
 
@@ -94,43 +97,144 @@ public class PersonController implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler", "Keine ID übergeben."));
         }
 
+        String formType = ec.getRequestParameterMap().get("formType");
+
+        if ("report".equals(formType)) {
+            isReportForm = true;
+            isRescueForm = false;
+        } else if ("rescue".equals(formType)) {
+            isReportForm = false;
+            isRescueForm = true;
+        } else {
+            // Fehlerbehandlung oder Standardwerte
+            isReportForm = false;
+            isRescueForm = false;
+        }
+
+    }
+
+    public Form getSelectedForm() {
+        return selectedForm;
+    }
+
+    public void setSelectedForm(Form selectedForm) {
+        this.selectedForm = selectedForm;
+    }
+
+    public Form getNewForm() {
+        return newForm;
+    }
+
+    public void setNewForm(Form newForm) {
+        this.newForm = newForm;
+    }
+
+
+    public GhostNets getSelectedGhostNet() {
+        return selectedGhostNet;
+    }
+
+    public void setSelectedGhostNet(GhostNets selectedGhostNet) {
+        this.selectedGhostNet = selectedGhostNet;
+    }
+
+    public List<GhostNets> getGhostNet() {
+        return ghostNet;
+    }
+
+    public void setGhostNet(List<GhostNets> ghostNet) {
+        this.ghostNet = ghostNet;
+    }
+
+    public void setNewGhostNet(GhostNets newGhostNet) {
+        this.newGhostNet = newGhostNet;
+    }
+
+    public GhostNets getNewGhostNet() {
+        return newGhostNet;
     }
 
     //Methode speichert Daten aus Formular
     public void saveGhostForm() {
-        // 1. Teildaten (Formular-Daten) speichern
 
-        String name = newPerson.getName();
-        String surname = newPerson.getSurname();
-        String phoneNumber = newPerson.getPhoneNumber();
+        try {
+            // Status des GhostNet-Formulars abfragen
+            String status = newGhostNet.getStatus();  // Annahme: newGhostNet enthält ein Statusfeld
 
-        // 2. Restliche Daten direkt im Ghost-Objekt speichern (length, width usw.)
-        GhostNets newGhostNets = new GhostNets();
-        newGhostNets.setName(name); // Name aus dem Formular
-        newGhostNets.setSurname(surname);
-        newGhostNets.setPhoneNumber(phoneNumber); // Telefonnummer aus dem Formular
+            // Verhalten für den Status "verschollen"
+            if ("verschollen".equals(status)) {
+                // Überprüfen, ob die notwendigen Felder für "verschollen" ausgefüllt sind
+                if (newForm.getName() != null && !newForm.getName().isEmpty() &&
+                        newForm.getSurname() != null && !newForm.getSurname().isEmpty() &&
+                        newForm.getPhoneNumber() != null && !newForm.getPhoneNumber().isEmpty()) {
 
-        // Beispiel für die restlichen Werte: Länge, Breite, Longitude und Latitude
-        newGhost.setLength(150.0);  // Beispielwert für Länge
-        newGhost.setWidth(100.0);   // Beispielwert für Breite
-        newGhost.setLongitude(12.34);  // Beispielwert für Längengrad
-        newGhost.setLatitude(56.78);   // Beispielwert für Breitengrad
+                    // Speichern des Formulars
+                    formDAO.save(newForm);
 
-        // 3. Speichern des neuen Ghost-Netzwerks in der Datenbank
-        ghostDAO.save(newGhost);
+                    Form form = formDAO.findById(newForm.getId());
 
-        // 4. Nach dem Speichern die Liste der Ghost-Netzwerke neu laden
-        ghostList = ghostDAO.findAll();
+                    // Überprüfen und Speichern der GhostNets-Daten
+                    if (form != null &&
+                            (newGhostNet.getLongitude() != null && !newGhostNet.getLongitude().equals(0.0)) &&
+                            (newGhostNet.getLatitude() != null && !newGhostNet.getLatitude().equals(0.0)) &&
+                            (newGhostNet.getLength() != null && !newGhostNet.getLength().equals(0.0)) &&
+                            (newGhostNet.getWidth() != null && !newGhostNet.getWidth().equals(0.0))) {
 
-        // 5. Formular zurücksetzen, um es für neue Eingaben zu leeren
-        newForm = new Person();
-    }
+                        // Formularstatus (Report oder Rescue) prüfen und zuordnen
+                        if (isReportForm) {
+                            newGhostNet.setReportForm(form);
+                        } else if (isRescueForm) {
+                            newGhostNet.setRescueForm(form);
+                        }
+
+                        ghostNetsDAO.save(newGhostNet);
+                    }
+                } else {
+                    // Wenn die Felder nicht ausgefüllt sind, erfolgt keine Speicherung
+                    System.out.println("Für den Status 'verschollen' müssen alle Felder (Name, Vorname, Telefonnummer) ausgefüllt sein.");
+                }
+            }
+
+            // Verhalten für den Status "gemeldet"
+            else if ("gemeldet".equals(status)) {
+                // Hier sind die Felder optional, keine Überprüfung notwendig
+                formDAO.save(newForm);
+
+                Form form = formDAO.findById(newForm.getId());
+
+                // Überprüfen und Speichern der GhostNets-Daten
+                if (form != null &&
+                        (newGhostNet.getLongitude() != null && !newGhostNet.getLongitude().equals(0.0)) &&
+                        (newGhostNet.getLatitude() != null && !newGhostNet.getLatitude().equals(0.0)) &&
+                        (newGhostNet.getLength() != null && !newGhostNet.getLength().equals(0.0)) &&
+                        (newGhostNet.getWidth() != null && !newGhostNet.getWidth().equals(0.0))) {
+
+                    // Formularstatus (Report oder Rescue) prüfen und zuordnen
+                    if (isReportForm) {
+                        newGhostNet.setReportForm(form);
+                    } else if (isRescueForm) {
+                        newGhostNet.setRescueForm(form);
+                    }
+
+                    ghostNetsDAO.save(newGhostNet);
+                }
+            }
+
+            // Aktualisieren und Zurücksetzen
+            forms = formDAO.findAll();
+            ghostNet = ghostNetsDAO.findAll();
+            newForm = new Form();
+            newGhostNet = new GhostNets();
+
+        } catch (Exception e) {
+            e.printStackTrace(); // Fehlerbehandlung
+        }
     }
 
     //Methode ändert Formular
     public String editGhostForm(long id) {
         selectedForm = formDAO.findById(id);
-        return "rescue?faces-redirect=true&id=" + id;
+        return "rescue?faces-redirect=true&id=" + id + "&formType=rescue";
     }
 
     public String updateStatus() {
@@ -147,20 +251,22 @@ public class PersonController implements Serializable {
             facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, errorMessage, null));
             return null;
         }
+
         // Aktualisiere den Status des Geisternetzes
         ghostNet.setStatus(newStatus);
-        ghostNetsDAO.update(ghostNet);
+        // Erstelle oder finde das Form-Objekt
+        Form rescueForm = new Form();
+        rescueForm.setName(newForm.getName());
+        rescueForm.setSurname(newForm.getSurname());
+        rescueForm.setPhoneNumber(newForm.getPhoneNumber());
+        formDAO.save(rescueForm);
 
-        // Speichere die Form-Daten
-        Person person = new Form();
-        form.setName(newForm.getName());
-        form.setSurname(newForm.getSurname());
-        form.setPhoneNumber(newForm.getPhoneNumber());
-        formDAO.save(form);
+        // Setze das Form-Objekt auf dem Geisternetz
+        ghostNet.setRescueForm(rescueForm);
+        ghostNetsDAO.update(ghostNet);
 
         return rescueSubmit();
     }
-
 
     ////////////////////////////////////////////////////////////////////////////////
 
@@ -173,8 +279,6 @@ public class PersonController implements Serializable {
     private String reportSelectStatus;
 
 
-    /////////////////////////////// Bergenformular ///////////////////////////////////////////
-    //Auswahloptionen Location Bergenformular
     public FormController() {
 
         //Auswahloptionen Status Bergenformular
@@ -186,6 +290,8 @@ public class PersonController implements Serializable {
         reportStatus.add("verschollen");
 
     }
+
+    /////////////////////////////// Bergenformular ///////////////////////////////////////////
 
     public List<String> getRescueStatus() {
         return rescueStatus;
@@ -213,7 +319,7 @@ public class PersonController implements Serializable {
 
         // Infonachricht anzeigen
         String successMessage = ResourceBundle.getBundle("nachrichten").getString("successMessage");
-        facesContext.addMessage(null , new FacesMessage(FacesMessage.SEVERITY_INFO, successMessage, null));
+        facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, successMessage, null));
 
         // Markiert als bereits verarbeitet
         submitted = true;
@@ -266,7 +372,7 @@ public class PersonController implements Serializable {
         flash.setKeepMessages(true);
 
         // Neuladen der aktuellen Seite
-        return "report.xhtml?faces-redirect=true";
+        return "report.xhtml?faces-redirect=true&formType=report";
     }
 
     //Bei Auswahl Status verschollen - Nachname, Name und Telefonnummer als Pflichtfelder markieren

@@ -1,28 +1,40 @@
-import jakarta.enterprise.context.SessionScoped;
-import jakarta.inject.Named;
+package Model;
 
 import java.io.Serializable;
 
-@Named
-@SessionScoped
+
 public class User implements Serializable {
 
+
+    private long id;
     private String username;
     private String password;
+    private String repeatPassword;
     private String mail;
+
+
+    public User (long id, String username, String password, String repeatPassword, String mail) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.repeatPassword = repeatPassword;
+        this.mail = mail;
+
+    }
 
     public User() {
 
     }
 
-    public User (String username, String password, String mail) {
-        this.username = username;
-        this.password = password;
-        this.mail = mail;
-
+    //Getter und Setter
+    public long getId() {
+        return id;
     }
 
-    //Getter und Setter
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -38,6 +50,9 @@ public class User implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public String getRepeatPassword() { return repeatPassword; }
+    public void setRepeatPassword(String repeatPassword) { this.repeatPassword = repeatPassword; }
 
     public String getMail() {
         return mail;

@@ -1,7 +1,6 @@
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+package Model;
+
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 
@@ -10,64 +9,80 @@ public class GhostNets implements Serializable {
 
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY) // automatische Zuweisung ID durch DB
-    private int id;
-    private double longitude;
-    private double latitude;
-    private double length;
-    private double width;
+    private long id;
+    private Double longitude;
+    private Double latitude;
+    private Double length;
+    private Double width;
     private String status;
+
+    // Netzmeldungen
+    @ManyToOne
+    @JoinColumn (name = "reported_by_id")
+    private Form reportForm;
+
+    // Netzbergungen
+    @ManyToOne
+    @JoinColumn(name = "rescued_by_id")
+    private Form rescueForm;
 
     public GhostNets() {
 
     }
 
-    public GhostNets(int id, double longitude, double latitude, double length, double width, String status) {
-        this.id = id;
-        this.longitude = longitude;
-        this.latitude = latitude;
-        this.length = length;
-        this.width = width;
-        this.status = status;
-
+    public Form getReportForm() {
+        return reportForm;
     }
 
-    public int getId() {
+    public void setReportForm(Form reportForm) {
+        this.reportForm = reportForm;
+    }
+
+    public Form getRescueForm() {
+        return rescueForm;
+    }
+
+    public void setRescueForm(Form rescueForm) {
+        this.rescueForm = rescueForm;
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public double getLongitude() {
+    public Double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(double longitude) {
+    public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
 
-    public double getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(double latitude) {
+    public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
 
-    public double getLength() {
+    public Double getLength() {
         return length;
     }
 
-    public void setLength(double length) {
+    public void setLength(Double length) {
         this.length = length;
     }
 
-    public double getWidth() {
+    public Double getWidth() {
         return width;
     }
 
-    public void setWidth(double width) {
+    public void setWidth(Double width) {
         this.width = width;
     }
 
@@ -78,5 +93,6 @@ public class GhostNets implements Serializable {
     public void setStatus(String status) {
         this.status = status;
     }
+
 }
 

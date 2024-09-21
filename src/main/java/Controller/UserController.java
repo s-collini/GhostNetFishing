@@ -1,7 +1,10 @@
-import jakarta.enterprise.context.SessionScoped;
+package Controller;
+
+import Model.User;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
@@ -13,7 +16,7 @@ import java.util.ResourceBundle;
 
 // Bean erstellen und Gültigkeitsbereich festlegen
 @Named
-@SessionScoped
+@ViewScoped
 public class UserController implements Serializable {
 
     @Inject
@@ -22,15 +25,15 @@ public class UserController implements Serializable {
     SupportOptionsController supportOptionsController;
 
     private List<User> users = new ArrayList<User>();
-    private String repeatPassword;
+
 
     //User anlegen
     public UserController() {
-        users.add(new User("SusanD", "IHelpGhostNetFishing", "susan.parker@outlook.uk"));
-        users.add(new User("Dorie", "GhostNets", "dorie@outlook.uk"));
-        users.add(new User("Nemo2", "FindGhostNets",  "nemo2@hotmail.uk"));
-        users.add(new User("Sarah_R5", "WhdL6z", "sarah_R5@icloud.com"));
-        users.add(new User("#Flipper", "IgagsGN23", "flipper@gmail.de"));
+        users.add(new User(1, "SusanD", "IHelpGhostNetFishing", "IHelpGhostNetFishing", "susan.parker@outlook.uk"));
+        users.add(new User(2, "Dorie", "GhostNets", "GhostNets", "dorie@outlook.uk"));
+        users.add(new User(3, "Nemo2", "FindGhostNets", "FindGhostNets", "nemo2@hotmail.uk"));
+        users.add(new User(4, "Sarah_R5", "WhdL6z", "WhdL6z", "sarah_R5@icloud.com"));
+        users.add(new User(5, "#Flipper", "IgagsGN23", "IgagsGN23", "flipper@gmail.de"));
     }
 
     //Getter und Setter
@@ -49,13 +52,6 @@ public class UserController implements Serializable {
         this.users = users;
     }
 
-    public String getRepeatPassword() {
-        return repeatPassword;
-    }
-
-    public void setRepeatPassword(String repeatPassword) {
-        this.repeatPassword = repeatPassword;
-    }
     public void setSupportOptionsController(SupportOptionsController supportOptionsController) {
         this.supportOptionsController = supportOptionsController;
     }
@@ -66,13 +62,12 @@ public class UserController implements Serializable {
         int redirectID = supportOptionsController.getRedirectID();
 
         if (validateUser(user.getUsername(), user.getPassword())) {
-            // Weiterleitung zur Seite basierend auf der ID
+            // Weiterleitung zur Seite basierend auf ID
             
             switch (redirectID) {
                 case 2:
-                    return "overview.xhtml?faces-redirect=true";
                 case 3:
-                    return "rescue.xhtml?faces-redirect=true";
+                    return "overview.xhtml?faces-redirect=true";
                 case 4:
                     return "worldMap.xhtml?faces-redirect=true";
                 default:
@@ -99,7 +94,7 @@ public class UserController implements Serializable {
         public String register() {
             FacesContext facesContext = FacesContext.getCurrentInstance();
 
-            if (!user.getPassword().equals(repeatPassword)) {
+            if (!user.getPassword().equals(user.getRepeatPassword())) {
                 String errorMessage = ResourceBundle.getBundle("nachrichten").getString("register.passwordsDoNotMatch");
                 facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, errorMessage, null));
                 return null; // Bleibt auf der gleichen Seite

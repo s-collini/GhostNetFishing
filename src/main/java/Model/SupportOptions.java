@@ -1,3 +1,5 @@
+package Model;
+
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Named;
 
@@ -6,23 +8,33 @@ import java.io.Serializable;
 @Named
 @ApplicationScoped
 public class SupportOptions implements Serializable {
+
+    private int id; //int da überschaubare Anzahl an Optionen, daher ausreichend
     private String name;
     private String image;
     private String description;
-    private int id;
+
+
+    public SupportOptions(int id, String name, String image,String description) {
+        this.id = id;
+        this.name = name;
+        this.image = image;
+        this.description = description;
+    }
 
     public SupportOptions() {
 
     }
 
-    public SupportOptions(String name, String image,String description, int id) {
-        this.name = name;
-        this.image = image;
-        this.description = description;
+    //Getter und Setter
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
         this.id = id;
     }
 
-    //Getter und Setter
     public String getName() {
         return name;
     }
@@ -47,11 +59,4 @@ public class SupportOptions implements Serializable {
         this.description = description;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 }

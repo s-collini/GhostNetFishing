@@ -1,3 +1,6 @@
+package Controller;
+
+import Model.SupportOptions;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -20,18 +23,10 @@ public class SupportOptionsController implements Serializable {
 
     //Unterstützungsmöglichkeiten auf Startseite in Form einer Tabelle darstellen
     public SupportOptionsController() {
-        options.add(new SupportOptions("Geisternetze melden", "fishing.jpg", "Hier können Sie Geisternetze melden, wenn sie eines sehen, bitte melden Sie es umgehend.", 1));
-        options.add(new SupportOptions("Überblick Geisternetze", "boat.jpg", "Hier befindet sich eine Tabelle mit allen gemeldeten Geisternetzen, bei denen die Bergung noch bevorsteht, die bereits geborgen wurden oder verschollen sind. Die Datenbank wächst, helfen Sie mit.", 2));
-        options.add(new SupportOptions("Geisternetze bergen", "turtle.jpg", "Hier können Sie sich zum Bergen von Geisternetzen melden. Helfen Sie mit und retten Sie Tierleben.", 3));
-        options.add(new SupportOptions("Weltkarte: noch zu bergende Geisternetze", "sea.jpg", "Hier können Sie alle noch nicht geborgenen Geisternetze auf einer Weltkarte sehen.", 4));
-    }
-
-    public SupportOptions getSupportOptions() {
-        return supportOptions;
-    }
-
-    public void setSupportOptions(SupportOptions supportOptions) {
-        this.supportOptions = supportOptions;
+        options.add(new SupportOptions(1, "Geisternetze melden", "../images/fishing.jpg", "Hier können Sie Geisternetze melden, wenn sie eines sehen, bitte melden Sie es umgehend."));
+        options.add(new SupportOptions(2, "Geisternetz-Datenbank", "../images/boat.jpg", "Hier befindet sich eine Datenbank mit allen gemeldeten Geisternetzen, bei denen die Bergung noch bevorsteht, die bereits geborgen wurden oder verschollen sind. Die Datenbank wächst, helfen Sie mit."));
+        options.add(new SupportOptions(3, "Geisternetze bergen", "../images/turtle.jpg", "Hier können Sie sich zum Bergen von Geisternetzen melden. Helfen Sie mit und retten Sie Tierleben."));
+        options.add(new SupportOptions(4, "Weltkarte: noch zu bergende Geisternetze", "../images/sea.jpg", "Hier können Sie alle noch nicht geborgenen Geisternetze auf einer Weltkarte sehen."));
     }
 
     public List<SupportOptions> getOptions() {
@@ -42,18 +37,16 @@ public class SupportOptionsController implements Serializable {
         return redirectID;
     }
 
-    public void setRedirectID(int redirectID) {
-        this.redirectID = redirectID;
-    }
 
     //Navigation programmieren
     public String navigateToPage(int id) {
-    //je nach ID wird entsprechende Seite aufgerufen beim Klicken auf die Schrift
+    /*je nach ID wird entsprechende Seite aufgerufen beim Klicken
+        auf die Unterstützungsmöglichkeit*/
         this.redirectID = id;
 
         switch (id) {
             case 1:
-                return "report.xhtml?faces-redirect=true";
+                return "report.xhtml?faces-redirect=true&formType=report";
             case 2:
             case 3:
             case 4:
@@ -64,3 +57,4 @@ public class SupportOptionsController implements Serializable {
     }
 
 }
+

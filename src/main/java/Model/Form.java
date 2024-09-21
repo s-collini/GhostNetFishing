@@ -7,19 +7,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Person implements Serializable {
+public class Form implements Serializable {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
     private String surname;
     private String phoneNumber;
 
-    @OneToMany
-    private List<GhostNets> ghostNets = new ArrayList<>();
 
-//Getter und Setter
+    @OneToMany(mappedBy = "reportForm")
+    private List<GhostNets> reportedGhostNets = new ArrayList<>();
+
+    @OneToMany(mappedBy = "rescueForm")
+    private List<GhostNets> rescuedGhostNets = new ArrayList<>();
+
+    //Getter und Setter
 
     public long getId() {
         return id;
@@ -53,4 +57,19 @@ public class Person implements Serializable {
         this.phoneNumber = phoneNumber;
     }
 
+    public List<GhostNets> getReportedGhostNets() {
+        return reportedGhostNets;
+    }
+
+    public void setReportedGhostNets(List<GhostNets> reportedGhostNets) {
+        this.reportedGhostNets = reportedGhostNets;
+    }
+
+    public List<GhostNets> getRescuedGhostNets() {
+        return rescuedGhostNets;
+    }
+
+    public void setRescuedGhostNets(List<GhostNets> rescuedGhostNets) {
+        this.rescuedGhostNets = rescuedGhostNets;
+    }
 }

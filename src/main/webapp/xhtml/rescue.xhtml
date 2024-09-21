@@ -8,7 +8,7 @@
 >
 <h:head>
     <title>GhostNetFishing</title>
-    <link rel="stylesheet" type="text/css" media="screen" href="../../style.css"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="../style.css"/>
 </h:head>
 
 <h:body>
@@ -39,11 +39,12 @@
         <h3>Geisternetzbergung(en) bekanntgeben</h3>
 
         <h:form>
+            <h:inputHidden id="formType" value="rescue" />
             <div class="flex-container">
                 <div class="flex-item">
                     <h4>Nachname*</h4>
                     <span class="ui-float-label">
-             <p:inputText id="surname" required="true"/>
+             <p:inputText id="surname" value="#{formController.newForm.surname}" required="true"/>
              <p:outputLabel for="surname" value="Mustermann"/>
          </span>
                     <h:message for="surname" styleClass="error"/>
@@ -52,7 +53,7 @@
                 <div class="flex-item">
                     <h4>Vorname*</h4>
                     <span class="ui-float-label">
-             <p:inputText id="name" required="true"/>
+             <p:inputText id="name" value="#{formController.newForm.name}" required="true"/>
              <p:outputLabel for="name" value="Max"/>
          </span>
                     <h:message for="name" styleClass="error"/>
@@ -61,35 +62,26 @@
                 <div class="flex-item">
                     <h4>Telefonnummer*</h4>
                     <span class="ui-float-label">
-             <p:inputText id="phoneNumber" required="true"/>
+             <p:inputText id="phoneNumber" value="#{formController.newForm.phoneNumber}" required="true"/>
              <p:outputLabel for="phoneNumber" value="z.B. +43 676 3718695"/>
          </span>
                     <h:message for="phoneNumber" styleClass="error"/>
                 </div>
             </div>
 
-            <div class="flex-container">
-                <div class="flex-item">
-                    <h4>Bergungsstandort*</h4>
-                    <p:selectCheckboxMenu id="location"
-                                          filter="true" filterMatchMode="startsWith"
-                                          multiple="true" emptyLabel="bitte Bergungsstandort(e) wählen"
-                                          updateLabel="true"
-                                          style="min-width: 15rem" panelStyle="width: 30rem" scrollHeight="250"
-                                          value="#{formController.selectLocations}"
-                                          required="true">
-                        <f:selectItems value="#{formController.locations}"  var ="location"
-                                       itemLabel="#{location}"
-                                       itemValue="#{location}"
-                                       />
-                    </p:selectCheckboxMenu>
-                    <h:message for="location" styleClass="error"/>
-                </div>
+           <div class="flex-container">
+               <div class="flex-item">
+                   <h4>Netz-ID aus Datenbanktabelle</h4>
+                   <span class="ui-float-label">
+             <h:outputText value="Netz-ID:" />
+            <h:outputText value="#{formController.selectedGhostNetId}" />
+         </span>
+               </div>
 
                 <div class="flex-item">
                     <h4>Status*</h4>
                     <div class="card">
-                        <p:selectOneMenu id="status" value="#{formController.rescueSelectStatus}"
+                        <p:selectOneMenu id="status" value="#{formController.newStatus}"
                                          layout="pageDirection" required="true">
                             <f:selectItem itemLabel="bitte Status wählen" itemValue="" />
                             <f:selectItems value="#{formController.rescueStatus}" var="status"
@@ -97,6 +89,7 @@
                                            itemValue="#{status}"/>
                         </p:selectOneMenu>
                         <h:message for="status" styleClass="error"/>
+
                     </div>
                 </div>
             </div>
@@ -112,8 +105,9 @@
                     </div>
                 </div>
             </div>
+            <h:messages id = "wrongStatus" globalOnly="true" styleClass="error"/>
             <p:commandButton value="Senden" styleClass="ui-button-outlined ui-button-info"
-                             action="#{formController.rescueSubmit()}" update="@form"/>
+                             action="#{formController.updateStatus()}" update="@form"/>
         </h:form>
     </div>
 
